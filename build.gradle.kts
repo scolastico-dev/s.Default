@@ -8,7 +8,7 @@ plugins {
     application
 }
 
-group = "me.scolastico"
+group = "me.scolastico" // HERE is configuration needed!
 version = "dev-snapshot"
 
 repositories {
@@ -26,7 +26,7 @@ tasks.withType<KotlinCompile>() {
 }
 
 application {
-    mainClass.set("me.scolastico.example.Application")
+    mainClass.set("me.scolastico.example.Application") // HERE is configuration needed!
 }
 
 buildscript {
@@ -49,12 +49,12 @@ tasks {
     }
     jar{
         manifest {
-            attributes["Main-Class"] = "me.scolastico.example.Application"
+            attributes["Main-Class"] = "me.scolastico.example.Application" // HERE is configuration needed!
         }
-        archiveFileName.set("example.jar")
+        archiveFileName.set("example.jar") // HERE is configuration needed!
     }
     shadowJar{
-        archiveBaseName.set("example-shadow")
+        archiveBaseName.set("example-shadow") // HERE is configuration needed!
         archiveClassifier.set("")
         archiveVersion.set("")
     }

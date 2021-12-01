@@ -5,10 +5,13 @@
 [![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Default?label=version)](https://github.com/scolastico-dev/s.Default/releases)
 [![badge](https://github.com/scolastico-dev/s.Default/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Default/actions)
 
-## *<This segment should be deleted before publishing!>*
+## *This segment should be deleted before publishing!*
 Your ToDo's:
-- Edit group and artifact id in pom.xml
-- Edit main.yml workflow in .github folder
+- Edit values in settings.gradle.kts
+- Edit values in build.gradle.kts
+- Edit values in .github/workflows/main.yml
+- Edit values in docs/mkdocs.yml
+- Create the documentation in docs/docs/
 
 ## License
 This project is licensed under the **Mozilla Public License Version 2.0**. Read more [here](https://www.mozilla.org/en-US/MPL/2.0/).
