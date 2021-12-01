@@ -126,6 +126,8 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Build with gradle
         run: ./gradlew build
       - uses: actions/upload-artifact@v2
@@ -161,17 +163,19 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Test with gradle
         run: ./gradlew test
   dokka:
     name: Generate Dokka
     runs-on: ubuntu-20.04
-    needs: [build, build-docs]
+    needs: [prepare, build-docs]
     steps:
       - uses: actions/download-artifact@v2
         name: Download prepared repository
         with:
-          name: builded-repo
+          name: prepared-repo
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
@@ -184,6 +188,8 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Generate dokka html with gradle
         run: ./gradlew dokkaHtml
       - name: Generate dokka javadaoc with gradle
@@ -204,7 +210,7 @@ jobs:
     name: Continuous integration
     if: github.event_name == 'release'
     runs-on: ubuntu-20.04
-    needs: [build, dokka, test]
+    needs: [build, dokka, test, detekt]
     steps:
       - uses: actions/download-artifact@v2
         name: Download build
@@ -305,5 +311,7 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Perform detekt analysis
         run: ./gradlew detekt
