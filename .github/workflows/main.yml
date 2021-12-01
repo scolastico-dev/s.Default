@@ -98,7 +98,7 @@ jobs:
           settings-path: ${{ github.workspace }}
       - name: Download dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: gradlew dependencies --refresh-dependencies
+        run: ./gradlew dependencies --refresh-dependencies
       - uses: actions/upload-artifact@v2
         name: Upload prepared repo to artifacts
         with:
@@ -126,7 +126,7 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Build with maven
-        run: gradlew build
+        run: ./gradlew build
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
         with:
@@ -161,7 +161,7 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Test with gradle
-        run: gradlew test
+        run: ./gradlew test
   dokka:
     name: Generate Dokka
     runs-on: ubuntu-20.04
@@ -188,10 +188,10 @@ jobs:
           settings-path: ${{ github.workspace }}
       - name: Generate dokka html with gradle
         if: ${{ env.GENERATE_DOKKA == 'true' }}
-        run: gradlew dokkaHtml
+        run: ./gradlew dokkaHtml
       - name: Generate dokka javadaoc with gradle
         if: ${{ env.GENERATE_DOKKA == 'true' }}
-        run: gradlew dokkaJavadoc
+        run: ./gradlew dokkaJavadoc
       - uses: actions/download-artifact@v2
         name: Download builded documentation
         with:
@@ -283,7 +283,7 @@ jobs:
       - name: Setup MkDocs
         run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
       - name: Generate Documentation
-        run: cd build && mkdocs build && cd ..
+        run: cd docs && mkdocs build && cd ..
       - uses: actions/upload-artifact@v2
         name: Upload builded files to artifacts
         with:
@@ -312,4 +312,4 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Perform detekt analysis
-        run: gradlew detekt
+        run: ./gradlew detekt
