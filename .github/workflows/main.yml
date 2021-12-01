@@ -198,6 +198,7 @@ jobs:
         name: Download builded documentation
         with:
           name: builded-docs
+          path: site/
       - name: Move dokka files into documentation.
         run: mv build/dokka/* site/
       - uses: actions/upload-artifact@v2
