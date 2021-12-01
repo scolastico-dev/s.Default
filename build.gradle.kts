@@ -34,7 +34,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.1.0")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
     }
 }

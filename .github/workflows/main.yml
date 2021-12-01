@@ -8,8 +8,6 @@ on:
   pull_request:
     types: [opened]
     branches: [main]
-  schedule:
-    - cron: '25 1 * * 4'
 
 # Secrets which are needed for CI_DOCS_TO_SERVER:
 #   SSH_HOST: An ip address.
@@ -199,8 +197,10 @@ jobs:
         with:
           name: builded-docs
           path: site/
+      - name: Move javadoc files into documentation.
+        run: mv build/dokka/javadoc site/javadoc
       - name: Move dokka files into documentation.
-        run: mv build/dokka/* site/
+        run: mv build/dokka/html site/dokka
       - uses: actions/upload-artifact@v2
         name: Upload dokka documentation to artifacts
         with:
