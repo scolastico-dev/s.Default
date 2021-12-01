@@ -11,6 +11,7 @@ Your ToDo's:
 - Edit values in build.gradle.kts
 - Edit values in .github/workflows/main.yml
 - Edit values in docs/mkdocs.yml
+- Edit header content of documentation in docs/overrides/main.html
 - Create the documentation in docs/docs/
 
 ## License
