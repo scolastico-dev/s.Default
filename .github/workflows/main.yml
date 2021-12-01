@@ -22,7 +22,6 @@ on:
 #   Enable GitHub pages and set the value of the env 'CI_DOCS_TO_GH_PAGES' to true.
 
 env:
-  GENERATE_DOKKA: true
   CI_DOCS_TO_SERVER: false
   CI_DOCS_TO_GH_PAGES: false
   USERNAME: scolastico-dev
@@ -96,6 +95,8 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Download dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./gradlew dependencies --refresh-dependencies
@@ -125,7 +126,7 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
-      - name: Build with maven
+      - name: Build with gradle
         run: ./gradlew build
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
@@ -168,29 +169,24 @@ jobs:
     needs: [build, build-docs]
     steps:
       - uses: actions/download-artifact@v2
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         name: Download prepared repository
         with:
           name: builded-repo
       - name: Cache dependencies
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         uses: actions/cache@v2
         id: cache
         with:
           path: ~/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts.xml') }}
       - name: Set up JDK 12
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         uses: actions/setup-java@v1
         with:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Generate dokka html with gradle
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         run: ./gradlew dokkaHtml
       - name: Generate dokka javadaoc with gradle
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         run: ./gradlew dokkaJavadoc
       - uses: actions/download-artifact@v2
         name: Download builded documentation
@@ -199,7 +195,6 @@ jobs:
       - name: Move dokka files into documentation.
         run: mv /build/dokka/* site/
       - uses: actions/upload-artifact@v2
-        if: ${{ env.GENERATE_DOKKA == 'true' }}
         name: Upload dokka documentation to artifacts
         with:
           name: dokka-docs
@@ -289,7 +284,6 @@ jobs:
         with:
           name: builded-docs
           path: docs/site/
-          retention-days: 1
   detekt:
     name: Detekt code analysis
     needs: prepare
