@@ -12,7 +12,6 @@ group = "me.scolastico" // HERE is configuration needed!
 version = "dev-snapshot"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
 }

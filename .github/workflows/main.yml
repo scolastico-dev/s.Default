@@ -6,7 +6,6 @@ on:
   release:
     types: [created]
   pull_request:
-    types: [opened]
     branches: [main]
 
 # Secrets which are needed for CI_DOCS_TO_SERVER:
@@ -127,7 +126,7 @@ jobs:
       - name: Setting permissions
         run: chmod +x ./gradlew
       - name: Build with gradle
-        run: ./gradlew build
+        run: ./gradlew build -x detekt
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
         with:
@@ -226,18 +225,22 @@ jobs:
         with:
           files: docs/
           dest: docs.zip
-      - name: Upload docs to Release
-        uses: JasonEtco/upload-to-release@master
+      - name: Upload docs to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          args: docs.zip application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload build to Release
-        uses: JasonEtco/upload-to-release@master
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: docs.zip
+          asset_name: docs.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          args: ${{ env.JAR_NAME }} application/java-archive
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.JAR_NAME }}
+          asset_name: ${{ env.JAR_NAME }}
+          tag: ${{ github.ref }}
+          overwrite: true
       - uses: peaceiris/actions-gh-pages@v3
         if: ${{ env.CI_DOCS_TO_GH_PAGES == 'true' }}
         name: Update live documentation on GH pages
@@ -273,7 +276,6 @@ jobs:
         with:
           name: builded-docs
   build-docs:
-    if: github.event_name != 'schedule' && github.event_name != 'pull_request'
     name: Generate documentation
     runs-on: ubuntu-20.04
     steps:
@@ -285,7 +287,7 @@ jobs:
       - name: Setup MkDocs
         run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
       - name: Generate Documentation
-        run: cd docs && mkdocs build && cd ..
+        run: mkdocs build --no-directory-urls -f ./docs/mkdocs.yml
       - uses: actions/upload-artifact@v2
         name: Upload builded files to artifacts
         with:
