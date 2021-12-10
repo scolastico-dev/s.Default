@@ -1,5 +1,6 @@
 package me.scolastico.example.routines.starting
 
+import me.scolastico.example.Application
 import me.scolastico.tools.handler.ErrorHandler
 import me.scolastico.tools.routine.Routine
 import me.scolastico.tools.routine.RoutineAnswer
@@ -12,7 +13,7 @@ class ErrorRoutine : Routine {
     override fun execute(hashMap: HashMap<String, Any>): RoutineAnswer {
         ErrorHandler.enableErrorLogFile()
         ErrorHandler.enableCatchUncaughtException()
-        //ErrorHandler.enableSentry("sentry dns url here");
+        //ErrorHandler.enableSentry("sentry dns url here", 1.0, 1.0, Application.version);
         return RoutineAnswer(hashMap)
     }
 }
