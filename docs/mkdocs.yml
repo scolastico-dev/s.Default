@@ -14,13 +14,12 @@ theme:
     - navigation.top
     - content.code.annotate
     - content.tabs.link
-  repo_url: https://github.com/scolastico-dev/s.Default # HERE is configuration needed!
-  repo_name: scolastico-dev/s.Default # HERE is configuration needed!
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/scolastico-dev/s.Default # HERE is configuration needed!
 plugins:
+  - search
   - git-revision-date-localized:
       fallback_to_build_date: true
 markdown_extensions:
@@ -49,5 +48,7 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - def_list
-copyright: 'Copyright &copy; 2021 - 2021 Joschua Becker EDV &#124; View instead in: <a href="dokka/index.html">Dokka Docs</a> or <a href="javadoc/index.html">JavaDoc</a>'
+copyright: 'Copyright &copy; 2021 - 2021 Joschua Becker'
 site_name: My Docs # HERE is configuration needed!
+repo_url: https://github.com/scolastico-dev/s.Default # HERE is configuration needed!
+repo_name: scolastico-dev/s.Default # HERE is configuration needed!
