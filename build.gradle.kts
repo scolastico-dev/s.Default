@@ -89,6 +89,6 @@ dependencies {
     //implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     // Default dependencies
-    implementation("me.scolastico:tools:1.5.1")
+    implementation("me.scolastico:tools:1.5.2")
     implementation("io.leego:banana:2.1.0")
 }
