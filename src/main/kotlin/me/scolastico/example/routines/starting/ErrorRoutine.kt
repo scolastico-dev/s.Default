@@ -13,7 +13,11 @@ class ErrorRoutine : Routine {
     override fun execute(hashMap: HashMap<String, Any>): RoutineAnswer {
         ErrorHandler.enableErrorLogFile()
         ErrorHandler.enableCatchUncaughtException()
-        //ErrorHandler.enableSentry("sentry dns url here", 1.0, 1.0, Application.version);
+//        ErrorHandler.enableSentry(
+//            "sentry dns url here",
+//            1.0,
+//            Application.version
+//        );
         return RoutineAnswer(hashMap)
     }
 }
