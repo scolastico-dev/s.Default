@@ -22,7 +22,7 @@ jobs:
         run: Exit 1
 
       - name: Read project-settings.env file.
-        run: export "$(cat templates/project-settings.env | sed 's/#.*//g' | xargs)"
+        run: export $(grep -v '^#' templates/project-settings.env | xargs)
 
       - name: Delete installation files.
         run: rm .github/workflow/init.yml README.md LICENSE
