@@ -141,7 +141,7 @@ jobs:
           'example-shadow.jar': '${{ env.PACKAGE_NAME }}"'
 
       - name: Refactor imports.
-        uses: datamonsters/replace-action
+        uses: datamonsters/replace-action@v2
         with:
           files: 'src/main/kotlin/me/scolastico/example/Application.kt,src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/ErrorRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/FinishRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt,src/main/kotlin/me/scolastico/example/dataholders/Config.kt'
           replacements: 'me.scolastico.example=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}'
