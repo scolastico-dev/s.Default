@@ -5,7 +5,7 @@
 [![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Default?label=version)](https://github.com/scolastico-dev/s.Default/releases)
 [![badge](https://github.com/scolastico-dev/s.Default/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Default/actions)
 
-## If this is your new repository: [![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](edit/main/templates/project-settings.env)
+## If this is your new repository: [![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](templates/project-settings.env)
 
 ## *This segment should be deleted before publishing!*
 Your ToDo's:
