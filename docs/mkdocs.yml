@@ -48,7 +48,7 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - def_list
-copyright: 'Copyright &copy; 2021 - 2021 Joschua Becker'
+copyright: 'Copyright &copy; 2021 - 2022 Joschua Becker'
 site_name: My Docs # HERE is configuration needed!
 repo_url: https://github.com/scolastico-dev/s.Default # HERE is configuration needed!
 repo_name: scolastico-dev/s.Default # HERE is configuration needed!

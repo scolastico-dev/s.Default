@@ -11,7 +11,6 @@ import java.time.Instant
  * Routine for printing the current build information as the first message of the application.
  */
 class HeaderRoutine : Routine{
-
     companion object {
         private const val CONSOLE_LOADING_SPEED = 25
     }

@@ -1,0 +1,188 @@
+name: Project installation
+
+on:
+  push:
+    paths:
+      - templates/project-settings.env
+
+jobs:
+  install:
+    name: Project Installation
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Exit if repo is the template itself.
+        if: ${{ github.repository == 'scolastico-dev/s.Default' }}
+        run: exit 1
+
+      - name: Get commit count of the repo.
+        run: export COMMIT_COUNT=`curl -I -k "https://api.github.com/repos/${{ github.repository }}/commits?per_page=1" | sed -n '/^[Ll]ink:/ s/.*"next".*page=\([0-9]*\).*"last".*/\1/p'`
+
+      - name: Exit if this is the first commit.
+        if: ${{ env.COMMIT_COUNT == '1' }}
+        run: Exit 1
+
+      - name: Read project-settings.env file.
+        run: export "$(cat project-settings.env | sed 's/#.*//g' | xargs)"
+
+      - name: Delete installation files.
+        run: rm .github/workflow/init.yml README.md LICENSE
+
+      - name: Replace old readme file with template.
+        run: mv templates/default-readme.md README.md
+
+      - name: Remove dependabot file.
+        if: ${{ env.ENABLE_DEPENDABOT != 'yes' }}
+        run: rm .github/dependabot.yml
+
+      - name: Remove funding file.
+        if: ${{ env.ENABLE_FUNDING != 'yes' }}
+        run: rm .github/FUNDING.yml
+
+      - name: Replace FUNDING.yml content. (1/2)
+        if: ${{ env.ENABLE_FUNDING == 'yes' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: '.github/FUNDING.yml'
+          _output-file: '.github/FUNDING.yml'
+          'github: scolastico': ${{ env.FUNDING_ACCOUNT }}
+          'custom: https://www.buymeacoffee.com/scolastico': ${{ env.FUNDING_URL }}
+
+      - name: Replace FUNDING.yml content. (2/2)
+        if: ${{ env.ENABLE_FUNDING == 'yes' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: '.github/FUNDING.yml'
+          _output-file: '.github/FUNDING.yml'
+          'github: no': ''
+          'custom: no': ''
+      - name: Download license file.
+        run: curl ${{ env.LICENSE_FILE_URL }} -o LICENSE
+
+      - name: Make license short name badge friendly.
+        uses: bluwy/substitute-string-action@v1
+        id: short-name-updater
+        with:
+          _input-text: ${{ env.LICENSE_SHORT_NAME }}
+          '-': '--'
+          '_': '__'
+          ' ': '_'
+
+      - name: Getting repository name.
+        uses: bluwy/substitute-string-action@v1
+        id: repository-name-getter
+        with:
+          _input-text: ${{ github.repository }}
+          '${{ github.repository_owner }}/': ''
+
+      - name: Replace README.md content. (Without 'other projects' suffix.)
+        if: ${{ env.OTHER_PROJECTS_SUFFIX == 'no' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _format-key: '{key}'
+          _input-file: 'README.md'
+          _output-file: 'README.md'
+          user_name: ${{ github.repository_owner }}
+          repo_name: ${{ steps.repository-name-getter.outputs.result }}
+          license_short_name: ${{ steps.short-name-updater.outputs.result }}
+          license_name: ${{ env.LICENSE_NAME }}
+          other_projects_suffix: ''
+
+      - name: Replace README.md content. (With 'other projects' suffix.)
+        if: ${{ env.OTHER_PROJECTS_SUFFIX != 'no' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _format-key: '{key}'
+          _input-file: 'README.md'
+          _output-file: 'README.md'
+          user_name: ${{ github.repository_owner }}
+          repo_name: ${{ steps.repository-name-getter.outputs.result }}
+          license_short_name: ${{ steps.short-name-updater.outputs.result }}
+          license_name: ${{ env.LICENSE_NAME }}
+          other_projects_suffix: ' ${{ env.OTHER_PROJECTS_SUFFIX }}'
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y')"
+
+      - name: Replace mkdocs.yml content.
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'docs/mkdocs.yml'
+          _output-file: 'docs/mkdocs.yml'
+          'scolastico-dev/s.Default # HERE is configuration needed!': ${{ github.repository }}
+          'My Docs # HERE is configuration needed!': ${{ env.PROJECT_NAME }}
+          '2021 - 2022': '${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }}'
+
+      - name: Replace build.gradle.kts content.
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'build.gradle.kts'
+          _output-file: 'build.gradle.kts'
+          'me.scolastico" // HERE is configuration needed!': '${{ env.GROUP_NAME }}"'
+          'me.scolastico.example.Application") // HERE is configuration needed!': '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")'
+          'me.scolastico.example.Application" // HERE is configuration needed!': '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"'
+          'example.jar") // HERE is configuration needed!': '${{ env.FILE_NAME }}.jar")'
+          'example-shadow") // HERE is configuration needed!': '${{ env.FILE_NAME }}-shadow")'
+
+      - name: Replace settings.gradle.kts content.
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'settings.gradle.kts'
+          _output-file: 'settings.gradle.kts'
+          'example" // HERE is configuration needed!': '${{ env.PACKAGE_NAME }}"'
+
+      - name: Replace main.yml content.
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'settings.gradle.kts'
+          _output-file: 'settings.gradle.kts'
+          'scolastico-dev': '${{ github.repository_owner }}"'
+          's.Default': '${{ steps.repository-name-getter.outputs.result }}"'
+          'example-shadow.jar': '${{ env.PACKAGE_NAME }}"'
+
+      - name: Refactor imports.
+        uses: datamonsters/replace-action
+        with:
+          files: 'src/main/kotlin/me/scolastico/example/Application.kt,src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/ErrorRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/FinishRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt,src/main/kotlin/me/scolastico/example/dataholders/Config.kt'
+          replacements: 'me.scolastico.example=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}'
+
+      - name: Remove database routine class.
+        if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
+        run: rm src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt
+
+      - name: Replace config routine.
+        if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
+        run: mv templates/ConfigRoutine.kt src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
+
+      - name: Remove database routine from main function.
+        if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'src/main/kotlin/me/scolastico/example/Application.kt'
+          _output-file: 'src/main/kotlin/me/scolastico/example/Application.kt'
+          'routines.add(DatabaseRoutine())': ''
+
+      - name: Getting folder name.
+        uses: bluwy/substitute-string-action@v1
+        id: folder-name-getter
+        with:
+          _input-text: '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}'
+          '.': '/'
+
+      - name: Create folders.
+        run: 'mkdir -p src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
+
+      - name: Refactor folders.
+        run: 'mv src/main/kotlin/me/scolastico/example/* src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
+
+      - name: Delete old folders.
+        run: 'rm -R src/main/kotlin/me/scolastico && rmdir --ignore-fail-on-non-empty src/main/kotlin/me'
+
+      - name: Delete (not anymore needed) installation files.
+        run: rm -R templates/
+
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v8.0.2
+        with:
+          message: Installed s.Default project and initalized all variables
+          default_author: github_actions

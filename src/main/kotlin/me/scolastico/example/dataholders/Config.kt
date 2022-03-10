@@ -5,7 +5,6 @@ package me.scolastico.example.dataholders
  */
 data class Config(
 
-    /** If the application is running in debug mode. */
     var debug: Boolean = false
 
 )

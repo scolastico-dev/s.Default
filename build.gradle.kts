@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
-    id("org.jetbrains.dokka") version "1.6.0"
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    kotlin("jvm") version "1.6.0"
+    id("org.jetbrains.dokka") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
@@ -33,7 +33,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.10")
     }
 }
 
@@ -41,10 +41,10 @@ apply(plugin="org.jetbrains.dokka")
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "12"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "12"
     }
     jar{
         manifest {
@@ -81,14 +81,6 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 
 dependencies {
     testImplementation(kotlin("test"))
-
-    // WebServer
-    //implementation("io.ktor:ktor-server-netty:1.6.4")
-    //implementation("io.ktor:ktor-html-builder:1.6.4")
-    //implementation("io.ktor:ktor-websockets:1.6.4")
-    //implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
-
-    // Default dependencies
-    implementation("me.scolastico:tools:1.5.2")
+    implementation("me.scolastico:tools:2.2.0-beta-3")
     implementation("io.leego:banana:2.1.0")
 }

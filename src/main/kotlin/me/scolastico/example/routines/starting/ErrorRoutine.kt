@@ -1,6 +1,5 @@
 package me.scolastico.example.routines.starting
 
-import me.scolastico.example.Application
 import me.scolastico.tools.handler.ErrorHandler
 import me.scolastico.tools.routine.Routine
 import me.scolastico.tools.routine.RoutineAnswer
