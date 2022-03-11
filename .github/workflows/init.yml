@@ -24,14 +24,10 @@ jobs:
       - name: Download repo from GitHub.
         uses: actions/checkout@v2
 
-      - name: Replace spaces in configuration.
-        uses: datamonsters/replace-action@v2
-        with:
-          files: 'templates/project-settings.env'
-          replacements: '=\ '
-
       - name: Read project-settings.env file.
-        run: export $(grep -v '^#' templates/project-settings.env | xargs)
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: templates/project-settings.env
 
       - name: Delete installation files.
         run: rm .github/workflow/init.yml README.md LICENSE
