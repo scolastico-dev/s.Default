@@ -120,57 +120,63 @@ jobs:
       - name: Replace mkdocs.yml content.
         uses: bluwy/substitute-string-action@v1
         with:
-          _input-file: 'docs/mkdocs.yml'
-          _output-file: 'docs/mkdocs.yml'
-          'scolastico-dev/s.Default': ${{ github.repository }}
-          'My Docs': ${{ env.PROJECT_NAME }}
-          '2021 - 2022': '${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }}'
+          include: |
+            docs/mkdocs.yml
+          placeholders: |
+            scolastico-dev/s.Default # HERE is configuration needed!=${{ github.repository }}
+            2021 - 2022=${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }}
+            My Docs # HERE is configuration needed!=${{ env.PROJECT_NAME }}
 
       - name: Replace build.gradle.kts content.
-        uses: bluwy/substitute-string-action@v1
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          _input-file: 'build.gradle.kts'
-          _output-file: 'build.gradle.kts'
-          'me.scolastico': '${{ env.GROUP_NAME }}'
-          'example.Application': '${{ env.PACKAGE_NAME }}.Application'
-          'example.jar': '${{ env.FILE_NAME }}.jar'
-          'example-shadow': '${{ env.FILE_NAME }}-shadow'
+          include: |
+            build.gradle.kts
+          placeholders: |
+            me.scolastico" // HERE is configuration needed!=${{ env.GROUP_NAME }}"
+            me.scolastico.example.Application") // HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
+            me.scolastico.example.Application" // HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
+            example.jar") // HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
+            example-shadow") // HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
 
       - name: Replace settings.gradle.kts content.
-        uses: bluwy/substitute-string-action@v1
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          _input-file: 'settings.gradle.kts'
-          _output-file: 'settings.gradle.kts'
-          'example': '${{ env.PACKAGE_NAME }}'
+          include: |
+            settings.gradle.kts
+          placeholders: |
+            example=${{ env.PACKAGE_NAME }}
 
-      - name: Replace main.yml content.
-        uses: bluwy/substitute-string-action@v1
+      - name: Update workflows.
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          _input-file: 'settings.gradle.kts'
-          _output-file: 'settings.gradle.kts'
-          'scolastico-dev': '${{ github.repository_owner }}'
-          's.Default': '${{ steps.repository-name-getter.outputs.result }}'
-          'example-shadow.jar': '${{ env.PACKAGE_NAME }}'
-          'ubuntu-20.04': '${{ env.ACTIONS_RUNS_ON }}'
-
-      - name: Replace dependabot.yml content.
-        uses: bluwy/substitute-string-action@v1
-        with:
-          _input-file: '.github/workflows/dependabot.yml'
-          _output-file: '.github/workflows/dependabot.yml'
-          'ubuntu-20.04': '${{ env.ACTIONS_RUNS_ON }}'
-          'AUTO_APPOROVE: on': 'AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}'
-          'AUTO_MERGE: on': 'AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}'
+          include: |
+            .github/workflows/main.yml
+          placeholders: |
+            ubuntu-20.04=${{ env.ACTIONS_RUNS_ON }}
+            example-shadow.jar=${{ env.PACKAGE_NAME }}
+            s.Default=${{ steps.repository-name-getter.outputs.result }}
+            scolastico-dev=${{ github.repository_owner }}
+            AUTO_APPOROVE: on=AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}
+            AUTO_MERGE: on=AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}
 
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
         run: mv templates/ConfigRoutine.kt src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
 
       - name: Refactor imports.
-        uses: datamonsters/replace-action@v2
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          files: 'src/main/kotlin/me/scolastico/example/Application.kt,src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/ErrorRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/FinishRoutine.kt,src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt,src/main/kotlin/me/scolastico/example/dataholders/Config.kt'
-          replacements: 'me.scolastico.example=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}'
+          include: |
+            src/main/kotlin/me/scolastico/example/Application.kt
+            src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
+            src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt
+            src/main/kotlin/me/scolastico/example/routines/starting/ErrorRoutine.kt
+            src/main/kotlin/me/scolastico/example/routines/starting/FinishRoutine.kt
+            src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
+            src/main/kotlin/me/scolastico/example/dataholders/Config.kt
+          placeholders: |
+            me.scolastico.example=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
 
       - name: Remove database routine class.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
@@ -195,10 +201,10 @@ jobs:
         run: echo ${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
 
       - name: Create folders.
-        run: 'mkdir -p src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
+        run: 'mkdir -p src/main/kotlin/${{ steps.folder-name-getter.outputs.result }}'
 
       - name: Refactor folders.
-        run: 'mv src/main/kotlin/me/scolastico/example/* src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
+        run: 'mv src/main/kotlin/me/scolastico/example/* src/main/kotlin/${{ steps.folder-name-getter.outputs.result }}'
 
       - name: Delete old folders.
         run: |
