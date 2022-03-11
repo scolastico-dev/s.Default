@@ -134,10 +134,10 @@ jobs:
             build.gradle.kts
           placeholders: |
             me.scolastico" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}"
-            me.scolastico.example.Application") \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
+            me.scolastico.example.Application"\) \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
             me.scolastico.example.Application" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
-            example.jar") \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
-            example-shadow") \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
+            example.jar"\) \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
+            example-shadow"\) \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
 
       - name: Replace settings.gradle.kts content.
         uses: LSVH/gha-replace-placeholders@v1
