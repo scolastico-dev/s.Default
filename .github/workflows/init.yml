@@ -155,7 +155,6 @@ jobs:
           include: |
             .github/actions.env
           placeholders: |
-            ubuntu-20.04=${{ env.ACTIONS_RUNS_ON }}
             example-shadow.jar=${{ env.PACKAGE_NAME }}
             s.Default=${{ steps.repository-name-getter.outputs.result }}
             scolastico-dev=${{ github.repository_owner }}
