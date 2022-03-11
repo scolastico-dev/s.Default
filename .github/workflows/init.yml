@@ -21,8 +21,16 @@ jobs:
         if: ${{ env.COMMIT_COUNT == '1' }}
         run: Exit 1
 
-      - name: Download repo from GitHub
+      - name: Download repo from GitHub.
         uses: actions/checkout@v2
+
+      - name: Replace spaces in configuration.
+        if: ${{ env.ENABLE_FUNDING == 'yes' }}
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'templates/project-settings.env'
+          _output-file: 'templates/project-settings.env'
+          ' ': '\ '
 
       - name: Read project-settings.env file.
         run: export $(grep -v '^#' templates/project-settings.env | xargs)
