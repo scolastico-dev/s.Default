@@ -155,7 +155,7 @@ jobs:
           include: |
             .github/actions.env
           placeholders: |
-            example-shadow.jar=${{ env.PACKAGE_NAME }}
+            example-shadow.jar=${{ env.PACKAGE_NAME }}-shadow.jar
             s.Default=${{ steps.repository-name-getter.outputs.result }}
             scolastico-dev=${{ github.repository_owner }}
             yes #auto-approve=AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}
