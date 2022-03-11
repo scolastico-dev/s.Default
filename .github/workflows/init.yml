@@ -123,7 +123,7 @@ jobs:
           include: |
             docs/mkdocs.yml
           placeholders: |
-            scolastico-dev/s.Default # HERE is configuration needed!=${{ github.repository }}
+            scolastico-dev\/s.Default # HERE is configuration needed!=${{ github.repository }}
             2021 - 2022=${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }}
             My Docs # HERE is configuration needed!=${{ env.PROJECT_NAME }}
 
@@ -133,11 +133,11 @@ jobs:
           include: |
             build.gradle.kts
           placeholders: |
-            me.scolastico" // HERE is configuration needed!=${{ env.GROUP_NAME }}"
-            me.scolastico.example.Application") // HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
-            me.scolastico.example.Application" // HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
-            example.jar") // HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
-            example-shadow") // HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
+            me.scolastico" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}"
+            me.scolastico.example.Application") \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
+            me.scolastico.example.Application" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
+            example.jar") \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
+            example-shadow") \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
 
       - name: Replace settings.gradle.kts content.
         uses: LSVH/gha-replace-placeholders@v1
@@ -152,6 +152,7 @@ jobs:
         with:
           include: |
             .github/workflows/main.yml
+            .github/workflows/dependabot.yml
           placeholders: |
             ubuntu-20.04=${{ env.ACTIONS_RUNS_ON }}
             example-shadow.jar=${{ env.PACKAGE_NAME }}
