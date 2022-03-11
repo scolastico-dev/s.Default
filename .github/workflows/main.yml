@@ -8,23 +8,6 @@ on:
   pull_request:
     branches: [main]
 
-# Secrets which are needed for CI_DOCS_TO_SERVER:
-#   SSH_HOST: An ip address.
-#   SSH_PORT: The port for ssh. Default is 22.
-#   SSH_USER: The username for the login.
-#   SSH_PRIVATE_KEY: The private key for the login.
-#   DOCUMENTATION_REMOTE_HOST_PATH: The path where to store the documentation.
-#   SSH_KNOWN_HOST: To get the known host execute: ssh-keyscan -H <IP_ADRESS>
-# OR:
-#   Enable GitHub pages and set the value of the env 'CI_DOCS_TO_GH_PAGES' to true.
-
-env:
-  CI_DOCS_TO_SERVER: false
-  CI_DOCS_TO_GH_PAGES: false
-  USERNAME: scolastico-dev
-  REPO: s.Default
-  JAR_NAME: example-shadow.jar
-
 jobs:
   prepare:
     name: Prepare Workflow
@@ -32,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Download repo from GitHub
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - uses: pozetroninc/github-action-get-latest-release@master
         id: version
         if: github.event_name == 'release'
@@ -111,6 +98,10 @@ jobs:
         name: Download prepared repository
         with:
           name: prepared-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
@@ -139,7 +130,6 @@ jobs:
           name: builded-repo
           path: ${{ github.workspace }}
   test:
-    if: github.event_name != 'schedule'
     name: Test
     runs-on: ubuntu-20.04
     needs: Build
@@ -148,6 +138,14 @@ jobs:
         name: Download prepared repository
         with:
           name: builded-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
@@ -173,6 +171,10 @@ jobs:
         name: Download prepared repository
         with:
           name: prepared-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
@@ -213,6 +215,15 @@ jobs:
     needs: [build, dokka, test, detekt]
     steps:
       - uses: actions/download-artifact@v2
+        name: Download prepared repository
+        with:
+          name: prepared-repo
+          path: repo/
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: repo/.github/actions.env
+      - uses: actions/download-artifact@v2
         name: Download build
         with:
           name: build
@@ -242,19 +253,19 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
       - uses: peaceiris/actions-gh-pages@v3
-        if: ${{ env.CI_DOCS_TO_GH_PAGES == 'true' }}
+        if: ${{ env.CI_DOCS_TO_GH_PAGES == 'yes' }}
         name: Update live documentation on GH pages
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/
       - name: Install SSH Key
-        if: ${{ env.CI_DOCS_TO_SERVER == 'true' }}
+        if: ${{ env.CI_DOCS_TO_SERVER == 'yes' }}
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.SSH_KNOWN_HOST }}
       - name: Deploy with rsync
-        if: ${{ env.CI_DOCS_TO_SERVER == 'true' }}
+        if: ${{ env.CI_DOCS_TO_SERVER == 'yes' }}
         run: rsync -avz -e 'ssh -p ${{ secrets.SSH_PORT }}' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENTATION_REMOTE_HOST_PATH }}
   cleanup:
     name: Cleanup
