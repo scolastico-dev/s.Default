@@ -1,0 +1,27 @@
+name: Dependabot Auto Response
+on: pull_request
+
+env:
+  AUTO_APPROVE: on
+  AUTO_MERGE: on
+
+permissions:
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Approve PR
+        if: ${{ env.AUTO_APROVE == 'on' }}
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Merge PR
+        if: ${{ env.AUTO_MERGE == 'on' }}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

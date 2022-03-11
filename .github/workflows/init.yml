@@ -53,8 +53,15 @@ jobs:
           _output-file: '.github/FUNDING.yml'
           'github: no': ''
           'custom: no': ''
-      - name: Download license file.
-        run: curl ${{ env.LICENSE_URL }} -o LICENSE
+
+      - name: Download and read license.md file.
+        run: |
+          curl ${{ env.LICENSE_MD }} -o license.md
+          echo "LICENSE_MD_CONTENT=`cat license.md`" >> $GITHUB_ENV
+          rm license.md
+
+      - name: Download license.txt file.
+        run: curl ${{ env.LICENSE_FILE }} -o LICENSE
 
       - name: Make license short name badge friendly.
         uses: bluwy/substitute-string-action@v1
@@ -82,7 +89,7 @@ jobs:
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
-          license_name: ${{ env.LICENSE_NAME }}
+          license_readme: ${{ env.LICENSE_MD_CONTENT }}
           other_projects_suffix: ''
 
       - name: Replace README.md content. (With 'other projects' suffix.)
@@ -96,7 +103,7 @@ jobs:
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
-          license_name: ${{ env.LICENSE_NAME }}
+          license_readme: ${{ env.LICENSE_MD_CONTENT }}
           other_projects_suffix: ' ${{ env.OTHER_PROJECTS_SUFFIX }}'
 
       - name: Get current date
@@ -134,9 +141,23 @@ jobs:
         with:
           _input-file: 'settings.gradle.kts'
           _output-file: 'settings.gradle.kts'
-          'scolastico-dev': '${{ github.repository_owner }}"'
-          's.Default': '${{ steps.repository-name-getter.outputs.result }}"'
-          'example-shadow.jar': '${{ env.PACKAGE_NAME }}"'
+          'scolastico-dev': '${{ github.repository_owner }}'
+          's.Default': '${{ steps.repository-name-getter.outputs.result }}'
+          'example-shadow.jar': '${{ env.PACKAGE_NAME }}'
+          'ubuntu-20.04': '${{ env.ACTIONS_RUNS_ON }}'
+
+      - name: Replace dependabot.yml content.
+        uses: bluwy/substitute-string-action@v1
+        with:
+          _input-file: 'settings.gradle.kts'
+          _output-file: 'settings.gradle.kts'
+          'ubuntu-20.04': '${{ env.ACTIONS_RUNS_ON }}'
+          'AUTO_APOROVE: on': 'AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}'
+          'AUTO_MERGE: on': 'AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}'
+
+      - name: Replace config routine.
+        if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
+        run: mv templates/ConfigRoutine.kt src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
 
       - name: Refactor imports.
         uses: datamonsters/replace-action@v2
@@ -147,10 +168,6 @@ jobs:
       - name: Remove database routine class.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
         run: rm src/main/kotlin/me/scolastico/example/routines/starting/DatabaseRoutine.kt
-
-      - name: Replace config routine.
-        if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
-        run: mv templates/ConfigRoutine.kt src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
 
       - name: Remove database routine from main function.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
