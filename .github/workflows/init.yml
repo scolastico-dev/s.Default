@@ -92,6 +92,7 @@ jobs:
           _format-key: '{key}'
           _input-file: 'README.md'
           _output-file: 'README.md'
+          project_name: ${{ env.PROJECT_NAME }}
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
@@ -155,10 +156,10 @@ jobs:
       - name: Replace dependabot.yml content.
         uses: bluwy/substitute-string-action@v1
         with:
-          _input-file: 'settings.gradle.kts'
-          _output-file: 'settings.gradle.kts'
+          _input-file: '.github/workflows/dependabot.yml'
+          _output-file: '.github/workflows/dependabot.yml'
           'ubuntu-20.04': '${{ env.ACTIONS_RUNS_ON }}'
-          'AUTO_APOROVE: on': 'AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}'
+          'AUTO_APPOROVE: on': 'AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}'
           'AUTO_MERGE: on': 'AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}'
 
       - name: Replace config routine.
@@ -190,6 +191,9 @@ jobs:
           _input-text: '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}'
           '.': '/'
 
+      - name: Debug echo
+        run: echo ${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
+
       - name: Create folders.
         run: 'mkdir -p src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
 
@@ -197,7 +201,10 @@ jobs:
         run: 'mv src/main/kotlin/me/scolastico/example/* src/main/kotlin/${{ steps.repository-name-getter.outputs.result }}'
 
       - name: Delete old folders.
-        run: 'rm -R src/main/kotlin/me/scolastico && rmdir --ignore-fail-on-non-empty src/main/kotlin/me'
+        run: |
+          rmdir --ignore-fail-on-non-empty src/main/kotlin/me/scolastico/example
+          rmdir --ignore-fail-on-non-empty src/main/kotlin/me/scolastico
+          rmdir --ignore-fail-on-non-empty src/main/kotlin/me
 
       - name: Delete (not anymore needed) installation files.
         run: rm -R templates/

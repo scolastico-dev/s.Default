@@ -9,8 +9,5 @@
 
 Read more [here](https://github.com/{user_name}/{repo_name}/blob/main/LICENSE).
 
-## Liability
-I or any other contributor is not responsible for any errors or mistakes that may appear! Use at your own risk.
-
 ## Other Projects
 Check out my other projects: [On Github](https://github.com/{user_name}){other_projects_suffix}.
