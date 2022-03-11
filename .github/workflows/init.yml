@@ -61,7 +61,7 @@ jobs:
           'github: no': ''
           'custom: no': ''
       - name: Download license file.
-        run: curl ${{ env.LICENSE_FILE_URL }} -o LICENSE
+        run: curl ${{ env.LICENSE_URL }} -o LICENSE
 
       - name: Make license short name badge friendly.
         uses: bluwy/substitute-string-action@v1
