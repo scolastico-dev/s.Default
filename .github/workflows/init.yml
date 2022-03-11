@@ -54,11 +54,17 @@ jobs:
           'github: no': ''
           'custom: no': ''
 
-      - name: Download and read license.md file.
-        run: |
-          curl ${{ env.LICENSE_MD }} -o license.md
-          echo "LICENSE_MD_CONTENT=`cat license.md`" >> $GITHUB_ENV
-          rm license.md
+      - name: Download temporary license.md file.
+        run: curl ${{ env.LICENSE_MD }} -o license.md
+
+      - name: Read license.md file.
+        id: read-license-md
+        uses: juliangruber/read-file-action@v1
+        with:
+            path: ./license.md
+
+      - name: Delete license.md file.
+        run: rm license.md
 
       - name: Download license.txt file.
         run: curl ${{ env.LICENSE_FILE }} -o LICENSE
@@ -89,7 +95,7 @@ jobs:
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
-          license_readme: ${{ env.LICENSE_MD_CONTENT }}
+          license_readme: ${{ steps.read-license-md.outputs.content }}
           other_projects_suffix: ''
 
       - name: Replace README.md content. (With 'other projects' suffix.)
@@ -103,7 +109,7 @@ jobs:
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
-          license_readme: ${{ env.LICENSE_MD_CONTENT }}
+          license_readme: ${{ steps.read-license-md.outputs.content }}
           other_projects_suffix: ' ${{ env.OTHER_PROJECTS_SUFFIX }}'
 
       - name: Get current date
