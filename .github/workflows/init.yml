@@ -30,7 +30,7 @@ jobs:
           env-file: templates/project-settings.env
 
       - name: Delete installation files.
-        run: rm .github/workflow/init.yml README.md LICENSE
+        run: rm .github/workflows/init.yml README.md LICENSE
 
       - name: Replace old readme file with template.
         run: mv templates/default-readme.md README.md
