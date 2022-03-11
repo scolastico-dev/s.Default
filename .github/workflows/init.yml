@@ -16,9 +16,6 @@ jobs:
 
       - name: Download repo from GitHub.
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-          fetch-depth: 0
 
       - name: Read project-settings.env file.
         uses: c-py/action-dotenv-to-setenv@v2
@@ -219,14 +216,7 @@ jobs:
       - name: Delete (not anymore needed) installation files.
         run: rm -R templates/
 
-      - name: Commit files
+      - name: Commit & Push files
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Installed s.Default project and initalized all variables" -a
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git commit -am "Installed s.Default project and initalized all variables"
+          git push
