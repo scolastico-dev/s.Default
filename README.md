@@ -6,7 +6,8 @@
 [![badge](https://github.com/scolastico-dev/s.Default/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Default/actions)
 
 ## *This segment should be deleted before publishing!*
-**If this is your new repository: [![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](templates/project-settings.env)**
+**If this is your new repository:
+[![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](templates/project-settings.env)**
 
 or (the old way):
 
