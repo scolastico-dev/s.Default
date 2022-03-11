@@ -14,13 +14,6 @@ jobs:
         if: ${{ github.repository == 'scolastico-dev/s.Default' }}
         run: exit 1
 
-      - name: Get commit count of the repo.
-        run: export COMMIT_COUNT=`curl -I -k "https://api.github.com/repos/${{ github.repository }}/commits?per_page=1" | sed -n '/^[Ll]ink:/ s/.*"next".*page=\([0-9]*\).*"last".*/\1/p'`
-
-      - name: Exit if this is the first commit.
-        if: ${{ env.COMMIT_COUNT == '1' }}
-        run: Exit 1
-
       - name: Download repo from GitHub.
         uses: actions/checkout@v2
 
@@ -99,6 +92,7 @@ jobs:
           _format-key: '{key}'
           _input-file: 'README.md'
           _output-file: 'README.md'
+          project_name: ${{ env.PROJECT_NAME }}
           user_name: ${{ github.repository_owner }}
           repo_name: ${{ steps.repository-name-getter.outputs.result }}
           license_short_name: ${{ steps.short-name-updater.outputs.result }}
@@ -114,8 +108,8 @@ jobs:
         with:
           _input-file: 'docs/mkdocs.yml'
           _output-file: 'docs/mkdocs.yml'
-          'scolastico-dev/s.Default # HERE is configuration needed!': ${{ github.repository }}
-          'My Docs # HERE is configuration needed!': ${{ env.PROJECT_NAME }}
+          'scolastico-dev/s.Default': ${{ github.repository }}
+          'My Docs': ${{ env.PROJECT_NAME }}
           '2021 - 2022': '${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }}'
 
       - name: Replace build.gradle.kts content.
@@ -123,18 +117,17 @@ jobs:
         with:
           _input-file: 'build.gradle.kts'
           _output-file: 'build.gradle.kts'
-          'me.scolastico" // HERE is configuration needed!': '${{ env.GROUP_NAME }}"'
-          'me.scolastico.example.Application") // HERE is configuration needed!': '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")'
-          'me.scolastico.example.Application" // HERE is configuration needed!': '${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"'
-          'example.jar") // HERE is configuration needed!': '${{ env.FILE_NAME }}.jar")'
-          'example-shadow") // HERE is configuration needed!': '${{ env.FILE_NAME }}-shadow")'
+          'me.scolastico': '${{ env.GROUP_NAME }}'
+          'example.Application': '${{ env.PACKAGE_NAME }}.Application'
+          'example.jar': '${{ env.FILE_NAME }}.jar'
+          'example-shadow': '${{ env.FILE_NAME }}-shadow'
 
       - name: Replace settings.gradle.kts content.
         uses: bluwy/substitute-string-action@v1
         with:
           _input-file: 'settings.gradle.kts'
           _output-file: 'settings.gradle.kts'
-          'example" // HERE is configuration needed!': '${{ env.PACKAGE_NAME }}"'
+          'example': '${{ env.PACKAGE_NAME }}'
 
       - name: Replace main.yml content.
         uses: bluwy/substitute-string-action@v1
