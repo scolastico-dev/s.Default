@@ -222,3 +222,5 @@ jobs:
         uses: EndBug/add-and-commit@v8.0.2
         with:
           message: Installed s.Default project and initalized all variables
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
