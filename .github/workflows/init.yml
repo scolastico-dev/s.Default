@@ -158,8 +158,8 @@ jobs:
             example-shadow.jar=${{ env.PACKAGE_NAME }}-shadow.jar
             s.Default=${{ steps.repository-name-getter.outputs.result }}
             scolastico-dev=${{ github.repository_owner }}
-            yes #auto-approve=AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}
-            yes #auto-merge=AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}
+            yes #auto-approve=${{ env.AUTO_APPROVE_DEPENDABOT }}
+            yes #auto-merge=${{ env.AUTO_MERGE_DEPENDABOT }}
 
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
