@@ -5,9 +5,11 @@
 [![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Default?label=version)](https://github.com/scolastico-dev/s.Default/releases)
 [![badge](https://github.com/scolastico-dev/s.Default/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Default/actions)
 
-## If this is your new repository: [![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](templates/project-settings.env)
-
 ## *This segment should be deleted before publishing!*
+**If this is your new repository: [![Install Project](https://img.shields.io/badge/Click%20To-Install%20Project-brightgreen)](templates/project-settings.env)**
+
+or (the old way):
+
 Your ToDo's:
 - Edit values in settings.gradle.kts
 - Edit values in build.gradle.kts
