@@ -149,19 +149,20 @@ jobs:
           placeholders: |
             example=${{ env.PACKAGE_NAME }}
 
-      - name: Update workflows.
-        uses: LSVH/gha-replace-placeholders@v1
-        with:
-          include: |
-            .github/workflows/main.yml
-            .github/workflows/dependabot.yml
-          placeholders: |
-            ubuntu-20.04=${{ env.ACTIONS_RUNS_ON }}
-            example-shadow.jar=${{ env.PACKAGE_NAME }}
-            s.Default=${{ steps.repository-name-getter.outputs.result }}
-            scolastico-dev=${{ github.repository_owner }}
-            AUTO_APPOROVE: on=AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}
-            AUTO_MERGE: on=AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}
+# Disabled because of limitations in the GitHub API
+#      - name: Update workflows.
+#        uses: LSVH/gha-replace-placeholders@v1
+#        with:
+#          include: |
+#            .github/workflows/main.yml
+#            .github/workflows/dependabot.yml
+#          placeholders: |
+#            ubuntu-20.04=${{ env.ACTIONS_RUNS_ON }}
+#            example-shadow.jar=${{ env.PACKAGE_NAME }}
+#            s.Default=${{ steps.repository-name-getter.outputs.result }}
+#            scolastico-dev=${{ github.repository_owner }}
+#            AUTO_APPOROVE: on=AUTO_APPROVE: ${{ env.AUTO_APPROVE_DEPENDABOT }}
+#            AUTO_MERGE: on=AUTO_MERGE: ${{ env.AUTO_MERGE_DEPENDABOT }}
 
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
