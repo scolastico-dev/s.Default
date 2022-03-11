@@ -7,6 +7,7 @@
 
 ## *Installation Instructions*
 First fork this project template to a new repository:
+
 [![Fork/Use Template](https://img.shields.io/badge/Click%20to-fork%2Fuse%20template-brightgreen)](https://github.com/scolastico-dev/s.Default/generate)
 
 **If this is _your_ new repository:**
