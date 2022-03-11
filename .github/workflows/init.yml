@@ -16,6 +16,9 @@ jobs:
 
       - name: Download repo from GitHub.
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Read project-settings.env file.
         uses: c-py/action-dotenv-to-setenv@v2
