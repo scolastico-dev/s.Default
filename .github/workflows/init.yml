@@ -21,6 +21,9 @@ jobs:
         if: ${{ env.COMMIT_COUNT == '1' }}
         run: Exit 1
 
+      - name: Download repo from GitHub
+        uses: actions/checkout@v2
+
       - name: Read project-settings.env file.
         run: export $(grep -v '^#' templates/project-settings.env | xargs)
 
