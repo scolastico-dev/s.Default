@@ -1,3 +1,4 @@
+@file:Suppress("WildcardImport")
 package me.scolastico.example
 
 import me.scolastico.example.dataholders.Config
