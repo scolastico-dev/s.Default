@@ -125,9 +125,9 @@ jobs:
           include: |
             docs/mkdocs.yml
           placeholders: |
-            scolastico-dev\/s.Default # HERE is configuration needed!=${{ github.repository }}
-            2021 - 2022 Joschua Becker=${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }} ${{ env.DEVELOPER_NAME }}
-            My Docs # HERE is configuration needed!=${{ env.PROJECT_NAME }}
+            scolastico-dev\/s.Default # HERE is configuration needed!/g=${{ github.repository }}
+            2021 - 2022 Joschua Becker/g=${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }} ${{ env.DEVELOPER_NAME }}
+            My Docs # HERE is configuration needed!/g=${{ env.PROJECT_NAME }}
 
       - name: Replace build.gradle.kts content.
         uses: LSVH/gha-replace-placeholders@v1
@@ -135,11 +135,11 @@ jobs:
           include: |
             build.gradle.kts
           placeholders: |
-            me.scolastico" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}"
-            me.scolastico.example.Application"\) \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
-            me.scolastico.example.Application" \/\/ HERE is configuration needed!=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
-            example.jar"\) \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}.jar")
-            example-shadow"\) \/\/ HERE is configuration needed!=${{ env.FILE_NAME }}-shadow")
+            me.scolastico" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}"
+            me.scolastico.example.Application"\) \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
+            me.scolastico.example.Application" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
+            example.jar"\) \/\/ HERE is configuration needed!/g=${{ env.FILE_NAME }}.jar")
+            example-shadow"\) \/\/ HERE is configuration needed!/g=${{ env.FILE_NAME }}-shadow")
 
       - name: Replace settings.gradle.kts content.
         uses: LSVH/gha-replace-placeholders@v1
@@ -147,7 +147,7 @@ jobs:
           include: |
             settings.gradle.kts
           placeholders: |
-            example" \/\/ HERE is configuration needed!=${{ env.PACKAGE_NAME }}"
+            example" \/\/ HERE is configuration needed!/g=${{ env.PACKAGE_NAME }}"
 
       - name: Update workflow configuration.
         uses: LSVH/gha-replace-placeholders@v1
@@ -155,11 +155,11 @@ jobs:
           include: |
             .github/actions.env
           placeholders: |
-            example-shadow.jar=${{ env.PACKAGE_NAME }}-shadow.jar
-            s.Default=${{ steps.repository-name-getter.outputs.result }}
-            scolastico-dev=${{ github.repository_owner }}
-            yes #auto-approve=${{ env.AUTO_APPROVE_DEPENDABOT }}
-            yes #auto-merge=${{ env.AUTO_MERGE_DEPENDABOT }}
+            example-shadow.jar/g=${{ env.PACKAGE_NAME }}-shadow.jar
+            s.Default/g=${{ steps.repository-name-getter.outputs.result }}
+            scolastico-dev/g=${{ github.repository_owner }}
+            yes #auto-approve/g=${{ env.AUTO_APPROVE_DEPENDABOT }}
+            yes #auto-merge/g=${{ env.AUTO_MERGE_DEPENDABOT }}
 
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
@@ -177,7 +177,7 @@ jobs:
             src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
             src/main/kotlin/me/scolastico/example/dataholders/Config.kt
           placeholders: |
-            me.scolastico.example=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
+            me.scolastico.example/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
 
       - name: Remove database routine class.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
