@@ -12,7 +12,7 @@ import org.fusesource.jansi.Ansi
 /**
  * Routine for loading the configuration files.
  */
-class ConfigRoutine2 : Routine {
+class ConfigRoutine : Routine {
     @Throws(Exception::class)
     @Suppress("TooGenericExceptionCaught", "LongMethod")
     override fun execute(hashMap: HashMap<String, Any>): RoutineAnswer {
