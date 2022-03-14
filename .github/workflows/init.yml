@@ -127,7 +127,7 @@ jobs:
           include: |
             docs/mkdocs.yml
           placeholders: |
-            /scolastico-dev\/s.Default # HERE is configuration needed!/g=${{ github.repository }}
+            /scolastico-dev\/s\.Default # HERE is configuration needed!/g=${{ github.repository }}
             /2021 - 2022 Joschua Becker/g=${{ steps.date.outputs.date }} - ${{ steps.date.outputs.date }} ${{ env.DEVELOPER_NAME }}
             /My Docs # HERE is configuration needed!/g=${{ env.PROJECT_NAME }}
 
@@ -137,10 +137,10 @@ jobs:
           include: |
             build.gradle.kts
           placeholders: |
-            /me.scolastico" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}"
-            /me.scolastico.example.Application"\) \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
-            /me.scolastico.example.Application" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
-            /example.jar"\) \/\/ HERE is configuration needed!/g=${{ env.FILE_NAME }}.jar")
+            /me\.scolastico" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}"
+            /me\.scolastico\.example\.Application"\) \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application")
+            /me\.scolastico\.example\.Application" \/\/ HERE is configuration needed!/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}.Application"
+            /example\.jar"\) \/\/ HERE is configuration needed!/g=${{ env.FILE_NAME }}.jar")
             /example-shadow"\) \/\/ HERE is configuration needed!/g=${{ env.FILE_NAME }}-shadow")
 
       - name: Replace settings.gradle.kts content.
@@ -157,8 +157,8 @@ jobs:
           include: |
             .github/actions.env
           placeholders: |
-            /example-shadow.jar/g=${{ env.FILE_NAME }}-shadow.jar
-            /s.Default/g=${{ steps.repository-name-getter.outputs.result }}
+            /example-shadow\.jar/g=${{ env.FILE_NAME }}-shadow.jar
+            /s\.Default/g=${{ steps.repository-name-getter.outputs.result }}
             /scolastico-dev/g=${{ github.repository_owner }}
             /yes #auto-approve/g=${{ env.AUTO_APPROVE_DEPENDABOT }}
             /yes #auto-merge/g=${{ env.AUTO_MERGE_DEPENDABOT }}
@@ -171,7 +171,7 @@ jobs:
             src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
           placeholders: |
             /bananaify\("Example"\)/g=bananaify("${{ env.PROJECT_NAME }}")
-            /println\("By: https:\/\/scolasti.co"\)/g=println("By: ${{ env.HEADER_SUFFIX }}")
+            /println\("By: https:\/\/scolasti\.co"\)/g=println("By: ${{ env.HEADER_SUFFIX }}")
 
       - name: Update HeaderRoutine.kt file. (With github profile url.)
         if: ${{ env.HEADER_SUFFIX == "github" }}
@@ -181,7 +181,7 @@ jobs:
             src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
           placeholders: |
             /bananaify\("Example"\)/g=bananaify("${{ env.PROJECT_NAME }}")
-            /println\("By: https:\/\/scolasti.co"\)/g=println("By: https://github.com/${{ github.repository_owner }}")
+            /println\("By: https:\/\/scolasti\.co"\)/g=println("By: https://github.com/${{ github.repository_owner }}")
 
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
@@ -199,7 +199,7 @@ jobs:
             src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
             src/main/kotlin/me/scolastico/example/dataholders/Config.kt
           placeholders: |
-            /me.scolastico.example/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
+            /me\.scolastico\.example/g=${{ env.GROUP_NAME }}.${{ env.PACKAGE_NAME }}
 
       - name: Remove database routine class.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
@@ -207,11 +207,12 @@ jobs:
 
       - name: Remove database routine from main function.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
-        uses: bluwy/substitute-string-action@v1
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          _input-file: 'src/main/kotlin/me/scolastico/example/Application.kt'
-          _output-file: 'src/main/kotlin/me/scolastico/example/Application.kt'
-          'routines.add(DatabaseRoutine())': ''
+          include: |
+            src/main/kotlin/me/scolastico/example/Application.kt
+          placeholders: |
+            /^ *routines\.add\(DatabaseRoutine\(\)\)\n/gm=
 
       - name: Getting folder name.
         uses: bluwy/substitute-string-action@v1
