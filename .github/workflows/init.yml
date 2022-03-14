@@ -50,6 +50,7 @@ jobs:
 
       - name: Replace FUNDING.yml content. (2/2)
         if: ${{ env.ENABLE_FUNDING == 'yes' }}
+        uses: LSVH/gha-replace-placeholders@v1
         with:
           include: |
             .github/FUNDING.yml
