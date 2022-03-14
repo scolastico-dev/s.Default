@@ -40,21 +40,22 @@ jobs:
 
       - name: Replace FUNDING.yml content. (1/2)
         if: ${{ env.ENABLE_FUNDING == 'yes' }}
-        uses: bluwy/substitute-string-action@v1
+        uses: LSVH/gha-replace-placeholders@v1
         with:
-          _input-file: '.github/FUNDING.yml'
-          _output-file: '.github/FUNDING.yml'
-          'github: scolastico': ${{ env.FUNDING_ACCOUNT }}
-          'custom: https://www.buymeacoffee.com/scolastico': ${{ env.FUNDING_URL }}
+          include: |
+            .github/FUNDING.yml
+          placeholders: |
+            /github: scolastico/g=github: ${{ env.FUNDING_ACCOUNT }}
+            /custom: https:\/\/www.buymeacoffee.com\/scolastico/g=custom: ${{ env.FUNDING_URL }}
 
       - name: Replace FUNDING.yml content. (2/2)
         if: ${{ env.ENABLE_FUNDING == 'yes' }}
-        uses: bluwy/substitute-string-action@v1
         with:
-          _input-file: '.github/FUNDING.yml'
-          _output-file: '.github/FUNDING.yml'
-          'github: no': ''
-          'custom: no': ''
+          include: |
+            .github/FUNDING.yml
+          placeholders: |
+            /github: no/g=
+            /ccustom: no/g=
 
       - name: Download temporary license.md file.
         run: curl ${{ env.LICENSE_MD }} -o license.md
@@ -161,6 +162,14 @@ jobs:
             /yes #auto-approve/g=${{ env.AUTO_APPROVE_DEPENDABOT }}
             /yes #auto-merge/g=${{ env.AUTO_MERGE_DEPENDABOT }}
 
+      - name: Update HeaderRoutine.kt file.
+        uses: LSVH/gha-replace-placeholders@v1
+        with:
+          include: |
+            src/main/kotlin/me/scolastico/example/routines/starting/HeaderRoutine.kt
+          placeholders: |
+            /bananaify\("Example"\)/g=bananaify("${{ env.PROJECT_NAME }}")
+
       - name: Replace config routine.
         if: ${{ env.ENABLE_DATABASE_SUPPORT != 'yes' }}
         run: mv templates/ConfigRoutine.kt src/main/kotlin/me/scolastico/example/routines/starting/ConfigRoutine.kt
@@ -220,5 +229,4 @@ jobs:
         uses: EndBug/add-and-commit@v8.0.2
         with:
           message: Installed s.Default project and initalized all variables
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
+          default_author: github_actions
