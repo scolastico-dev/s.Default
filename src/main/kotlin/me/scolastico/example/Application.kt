@@ -15,8 +15,8 @@ import me.scolastico.tools.simplified.SimplifiedResourceFileReader
  */
 class Application private constructor() {
     companion object {
-        var configHandler:ConfigHandler<Config>? = null
-        var config:Config? = null
+        lateinit var configHandler:ConfigHandler<Config>
+        lateinit var config:Config
         val version:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/VERSION")
         val branch:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/BRANCH")
         val commit:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/COMMIT")
