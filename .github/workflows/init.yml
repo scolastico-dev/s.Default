@@ -164,7 +164,7 @@ jobs:
             /yes #auto-merge/g=${{ env.AUTO_MERGE_DEPENDABOT }}
 
       - name: Update HeaderRoutine.kt file.
-        if: ${{ env.HEADER_SUFFIX != "github" }}
+        if: ${{ env.HEADER_SUFFIX != 'github' }}
         uses: LSVH/gha-replace-placeholders@v1
         with:
           include: |
@@ -174,7 +174,7 @@ jobs:
             /println\("By: https:\/\/scolasti\.co"\)/g=println("By: ${{ env.HEADER_SUFFIX }}")
 
       - name: Update HeaderRoutine.kt file. (With github profile url.)
-        if: ${{ env.HEADER_SUFFIX == "github" }}
+        if: ${{ env.HEADER_SUFFIX == 'github' }}
         uses: LSVH/gha-replace-placeholders@v1
         with:
           include: |
