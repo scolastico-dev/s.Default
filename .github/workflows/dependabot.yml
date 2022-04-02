@@ -3,6 +3,7 @@ on: pull_request
 
 permissions:
   pull-requests: write
+  contents: write
 
 jobs:
   dependabot:
@@ -16,7 +17,7 @@ jobs:
         with:
           env-file: .github/actions.env
       - name: Approve PR
-        if: ${{ env.AUTO_APROVE == 'yes' }}
+        if: ${{ env.AUTO_APPROVE == 'yes' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
