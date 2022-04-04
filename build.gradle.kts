@@ -81,6 +81,6 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("me.scolastico:tools:2.2.0")
+    implementation("me.scolastico:tools:2.2.1")
     implementation("io.leego:banana:2.1.0")
 }
