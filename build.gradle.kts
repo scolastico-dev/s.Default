@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
     id("org.jetbrains.dokka") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("jvm") version "1.7.10"
